@@ -22,11 +22,6 @@
                     "slug": "inventory.index"
                 },
                 {
-                    "url": "/pharmaceutical-laboratories",
-                    "name": "Laboratorios Farmacéuticos",
-                    "slug": "pharmaceutical-laboratories.index"
-                },
-                {
                     "url": "/purchase/index",
                     "name": "Compras",
                     "slug": "purchase.index"
