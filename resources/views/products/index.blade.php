@@ -421,6 +421,9 @@
             <div class="flex-wrap gap-3 pb-2 d-flex justify-content-between align-items-center row gap-md-0">
                 <div class="col-md-4 companies"></div>
                 <div class="gap-2 d-flex align-items-center">
+                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                        <i class="ti ti-plus me-1"></i> Agregar Producto
+                    </button>
                     <a href="{{ route('product-categories.index') }}" class="btn btn-sm btn-label-primary">
                         <i class="ti ti-category me-1"></i> Categorías
                     </a>
