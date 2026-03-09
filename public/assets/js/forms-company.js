@@ -69,7 +69,7 @@ function getdepartamentos(pais, type="", selected, selectedact){
  //Get countrys avaibles
  if(type=='edit'){
     $.ajax({
-        url: "/getdepartment/"+btoa(pais),
+        url: companyBaseUrl + "getdepartment/" + btoa(pais),
         method: "GET",
         success: function(response){
             $('#departamentedit').find('option:not(:first)').remove();
@@ -86,7 +86,7 @@ function getdepartamentos(pais, type="", selected, selectedact){
 
      //Get acteconomica
  $.ajax({
-    url: "/geteconomicactivity/"+btoa(pais),
+    url: companyBaseUrl + "geteconomicactivity/" + btoa(pais),
     method: "GET",
     success: function(response){
         $.each(response, function(index, value) {
@@ -101,7 +101,7 @@ function getdepartamentos(pais, type="", selected, selectedact){
 });
  }else{
     $.ajax({
-        url: "/getdepartment/"+btoa(pais),
+        url: companyBaseUrl + "getdepartment/" + btoa(pais),
         method: "GET",
         success: function(response){
             $('#departament').find('option:not(:first)').remove();
@@ -112,7 +112,7 @@ function getdepartamentos(pais, type="", selected, selectedact){
     });
      //Get acteconomica
  $.ajax({
-    url: "/geteconomicactivity/"+btoa(pais),
+    url: companyBaseUrl + "geteconomicactivity/" + btoa(pais),
     method: "GET",
     success: function(response){
         $.each(response, function(index, value) {
@@ -127,7 +127,7 @@ function getmunicipio(dep, type="", selected){
     if(type=='edit'){
 //Get countrys avaibles
 $.ajax({
-    url: "/getmunicipality/"+btoa(dep),
+    url: companyBaseUrl + "getmunicipality/" + btoa(dep),
     method: "GET",
     success: function(response){
      $('#municipioedit').find('option:not(:first)').remove();
@@ -144,7 +144,7 @@ $.ajax({
     }else{
 //Get countrys avaibles
 $.ajax({
-    url: "/getmunicipality/"+btoa(dep),
+    url: companyBaseUrl + "getmunicipality/" + btoa(dep),
     method: "GET",
     success: function(response){
      $('#municipio').find('option:not(:first)').remove();
