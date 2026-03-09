@@ -54,6 +54,7 @@ class UserController extends Controller
 
     public function getUserid($id)
     {
+        $userId = (int) base64_decode($id);
         $Users = "SELECT
         (SELECT GROUP_CONCAT(com.name) FROM permission_company AS em
         INNER JOIN companies AS com ON em.company_id=com.id
@@ -63,12 +64,10 @@ class UserController extends Controller
         WHERE em.user_id=users.id) AS 'CompaniesId',
         roles.name AS role,
         users.*
-        FROM
-        users
-        INNER JOIN model_has_roles ON users.id = model_has_roles.model_id
-        INNER JOIN roles ON model_has_roles.role_id = roles.id
-        WHERE
-        users.id = ".base64_decode($id)."";
+        FROM users
+        LEFT JOIN model_has_roles ON users.id = model_has_roles.model_id
+        LEFT JOIN roles ON model_has_roles.role_id = roles.id
+        WHERE users.id = {$userId}";
         $result = DB::select(DB::raw($Users));
         return response()->json($result);
     }
@@ -165,21 +164,29 @@ class UserController extends Controller
        $user->name = $request->nameedit;
        $user->image = $nombre;
        $roles = $user->getRoleNames();
-       //dd($roles);
-       if(!$user->hasRole($request->roleedit)) {
-        $user->removeRole($roles[0]);
-        $user->assignRole($request->roleedit);}
+       if ($request->filled('roleedit')) {
+           if (!$user->hasRole($request->roleedit)) {
+               if ($roles->isNotEmpty()) {
+                   $user->removeRole($roles[0]);
+               }
+               $user->assignRole($request->roleedit);
+           }
+       }
        $user->save();
-       $permission = json_decode($request->permissioncompanyedit, TRUE);
-       //dd($permission);
-       $valperuser = PermissionCompany::where('user_id', '=',$user['id']);
-       $valperuser -> delete();
+       $permission = json_decode($request->permissioncompanyedit, true);
+       if (!is_array($permission)) {
+           $permission = [];
+       }
+       PermissionCompany::where('user_id', $user->id)->delete();
        foreach ($permission as $per){
-            $percompany= new PermissionCompany();
-            $percompany->user_id = $user['id'];
-            $percompany->company_id = $per['value'];
-            $percompany->state = 1;
-            $percompany->save();
+            $companyId = $per['value'] ?? $per['id'] ?? null;
+            if ($companyId) {
+                $percompany = new PermissionCompany();
+                $percompany->user_id = $user->id;
+                $percompany->company_id = $companyId;
+                $percompany->state = 1;
+                $percompany->save();
+            }
         }
         return redirect()->route('user.index');
     }

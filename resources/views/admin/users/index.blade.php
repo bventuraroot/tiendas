@@ -30,6 +30,7 @@
 @endsection
 
 @section('page-script')
+    <script>window.avatarBaseUrl = '{{ asset("assets/img/avatars") }}/';</script>
     <script src="{{ asset('assets/js/app-user-list.js') }}"></script>
 @endsection
 

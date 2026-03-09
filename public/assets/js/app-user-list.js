@@ -25,14 +25,24 @@ $(function () {
     headingColor = config.colors.headingColor;
   }
 
+  var userBaseUrl = (typeof baseUrl !== 'undefined' ? baseUrl : '') || (document.querySelector('[data-base-url]') ? document.querySelector('[data-base-url]').getAttribute('data-base-url') + '/' : (window.location.origin + '/'));
+
   $.ajax({
-    url: "/getroles",
+    url: userBaseUrl + "getroles",
     method: "GET",
     success: function(response){
+        $('#role').empty().append('<option value="">Seleccionar rol</option>');
+        $('#roleedit').empty().append('<option value="">Seleccionar rol</option>');
         $.each(response, function(index, value) {
                 $('#role').append('<option value="'+value.name+'">'+value.name+'</option>');
                 $('#roleedit').append('<option value="'+value.name+'">'+value.name+'</option>');
-          });
+        });
+        if ($('.select2roleedit').length && !$('.select2roleedit').hasClass('select2-hidden-accessible')) {
+            $('.select2roleedit').select2({
+                placeholder: 'Seleccionar rol',
+                dropdownParent: $('.select2roleedit').parent()
+            });
+        }
     }
 });
 
@@ -448,15 +458,14 @@ $(function () {
   // Users List suggestion
   //------------------------------------------------------
   const TagifyUserListEl = document.querySelector('#permissioncompany');
-  //var usersList;
   $.ajax({
-    url: "/company/getCompanytag",
+    url: userBaseUrl + "company/getCompanytag",
     method: "GET",
     success: function(response){
-        var usersList = response
+        var usersList = response;
         tags(usersList);
     }
-});
+  });
 
 
 function tags(usersList){
@@ -578,133 +587,81 @@ function llamarselected(){
 }
 
 
+var tagifyEditInstance = null;
+
 function editUsers(id){
-    //Get data edit users
-    $.ajax({
-        url: "getuserid/"+btoa(id),
-        method: "GET",
-        success: function(response){
-            //llamarselected(response[0]['country'],response[0]['departament'],response[0]['municipio'], response[0]['acteconomica']);
-            $.each(response[0], function(index, value) {
-                if(index=='image'){
-                    $('#avatarview').html("<img src='http://inetv4.test/assets/img/avatars/"+value+"' alt='logo' width='150px'><input type='hidden' name='logoeditoriginal' id='logoeditoriginal'/>");
-                    $('#logoeditoriginal').val(value);
-                }else if(index=='CompaniesName'){
-                    $('#permissioncompanyedit').val(value);
-                }else if(index=='role'){
-                    $('#roleedit option[value="'+value+'"]').attr("selected", "selected");
-                }else{
-                    $('#'+index+'edit').val(value);
-                }
-              });
-              const bsOffcanvas = new bootstrap.Offcanvas('#offcanvasUpdateUser').show();
+    var userBaseUrl = (typeof baseUrl !== 'undefined' ? baseUrl : '') || (document.querySelector('[data-base-url]') ? document.querySelector('[data-base-url]').getAttribute('data-base-url') + '/' : (window.location.origin + '/'));
+
+    $.when(
+        $.ajax({ url: userBaseUrl + "user/getuserid/" + btoa(id), method: "GET" }),
+        $.ajax({ url: userBaseUrl + "company/getCompanytag", method: "GET" })
+    ).done(function(userResponse, companiesResponse){
+        var userData = userResponse[0] && userResponse[0][0] ? userResponse[0][0] : null;
+        var companiesList = companiesResponse[0] || [];
+        if (!userData) {
+            if (typeof Swal !== 'undefined') Swal.fire({ icon: 'error', title: 'Error', text: 'No se encontraron datos del usuario' });
+            return;
         }
+
+        var ids = (userData.CompaniesId || '').toString().split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+        var names = (userData.CompaniesName || '').toString().split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+        var initialCompanies = [];
+        for (var i = 0; i < Math.max(ids.length, names.length); i++) {
+            initialCompanies.push({ value: ids[i] || '', name: names[i] || '' });
+        }
+
+        $('#idedit').val(userData.id);
+        $('#nameedit').val(userData.name || '');
+        $('#emailedit').val(userData.email || '');
+        var imgVal = userData.image || '';
+        var avatarBase = (typeof window.avatarBaseUrl !== 'undefined' ? window.avatarBaseUrl : '') || (window.location.origin + '/assets/img/avatars/');
+        $('#avatarview').html((imgVal ? "<img src='" + (avatarBase + imgVal) + "' alt='logo' width='150px'>" : "") + "<input type='hidden' name='logoeditoriginal' id='logoeditoriginal'/>");
+        $('#logoeditoriginal').val(imgVal);
+
+        $('#roleedit').val(userData.role || '').trigger('change');
+
+        var tagifyEl = document.querySelector('#permissioncompanyedit');
+        if (tagifyEl) {
+            if (tagifyEditInstance) {
+                tagifyEditInstance.destroy();
+                tagifyEditInstance = null;
+            }
+            var tagifyInput = document.createElement('input');
+            tagifyInput.id = 'permissioncompanyedit';
+            tagifyInput.name = 'permissioncompanyedit';
+            tagifyInput.className = 'form-control';
+            tagifyInput.setAttribute('required', 'required');
+            tagifyEl.parentNode.replaceChild(tagifyInput, tagifyEl);
+
+            var logoBase = (document.querySelector('[data-base-url]') ? document.querySelector('[data-base-url]').getAttribute('data-base-url').replace(/\/$/, '') : window.location.origin) + '/assets/img/logo/';
+            tagifyEditInstance = new Tagify(tagifyInput, {
+                tagTextProp: 'name',
+                enforceWhitelist: true,
+                skipInvalid: true,
+                dropdown: { closeOnSelect: false, enabled: 0, classname: 'users-list', searchKeys: ['name', 'email'] },
+                templates: {
+                    tag: function(tagData) {
+                        return "<tag title=\"" + (tagData.title || tagData.email || '') + "\" contenteditable='false' spellcheck='false' tabIndex='-1' class='" + (tagData.class || '') + "'>" +
+                            "<x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>" +
+                            "<div><div class='tagify__tag__avatar-wrap'><img onerror=\"this.style.visibility='hidden'\" src='" + (logoBase + (tagData.avatar || '')) + "'></div>" +
+                            "<span class='tagify__tag-text'>" + (tagData.name || '') + "</span></div></tag>";
+                    },
+                    dropdownItem: function(tagData) {
+                        return "<div class='tagify__dropdown__item align-items-center' tabindex='0' role='option'>" +
+                            (tagData.avatar ? "<div class='tagify__dropdown__item__avatar-wrap'><img onerror=\"this.style.visibility='hidden'\" src='" + (logoBase + tagData.avatar) + "'></div>" : "") +
+                            "<strong>" + (tagData.name || '') + "</strong><span>" + (tagData.email || '') + "</span></div>";
+                    }
+                },
+                whitelist: companiesList
+            });
+            tagifyEditInstance.addTags(initialCompanies);
+        }
+
+        new bootstrap.Offcanvas(document.getElementById('offcanvasUpdateUser')).show();
+    }).fail(function(){
+        if (typeof Swal !== 'undefined') Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudieron cargar los datos' });
     });
-    const TagifyUserListEl = document.querySelector('#permissioncompanyedit');
-  //var usersList;
-  $.ajax({
-    url: "/company/getCompanytag",
-    method: "GET",
-    success: function(response){
-        var usersList = response
-        tagsedit(usersList);
-    }
-});
-
-function tagsedit(usersList){
-    function tagTemplate(tagData) {
-    return `
-    <tag title="${tagData.title || tagData.email}"
-      contenteditable='false'
-      spellcheck='false'
-      tabIndex="-1"
-      class="${this.settings.classNames.tag} ${tagData.class ? tagData.class : ''}"
-      ${this.getAttributes(tagData)}
-    >
-      <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
-      <div>
-        <div class='tagify__tag__avatar-wrap'>
-          <img onerror="this.style.visibility='hidden'" src="../assets/img/logo/${tagData.avatar}">
-        </div>
-        <span class='tagify__tag-text'>${tagData.name}</span>
-      </div>
-    </tag>
-  `;
-  }
-
-  function suggestionItemTemplate(tagData) {
-    return `
-    <div ${this.getAttributes(tagData)}
-      class='tagify__dropdown__item align-items-center ${tagData.class ? tagData.class : ''}'
-      tabindex="0"
-      role="option"
-    >
-      ${
-        tagData.avatar
-          ? `<div class='tagify__dropdown__item__avatar-wrap'>
-          <img onerror="this.style.visibility='hidden'" src="../assets/img/logo/${tagData.avatar}">
-        </div>`
-          : ''
-      }
-      <strong>${tagData.name}</strong>
-      <span>${tagData.email}</span>
-    </div>
-  `;
-  }
-      // initialize Tagify on the above input node reference
-  let TagifyUserList = new Tagify(TagifyUserListEl, {
-    tagTextProp: 'name', // very important since a custom template is used with this property as text. allows typing a "value" or a "name" to match input with whitelist
-    enforceWhitelist: true,
-    skipInvalid: true, // do not remporarily add invalid tags
-    dropdown: {
-      closeOnSelect: false,
-      enabled: 0,
-      classname: 'users-list',
-      searchKeys: ['name', 'email'] // very important to set by which keys to search for suggesttions when typing
-    },
-    templates: {
-      tag: tagTemplate,
-      dropdownItem: suggestionItemTemplate
-    },
-    whitelist: usersList
-  });
-
-  TagifyUserList.on('dropdown:show dropdown:updated', onDropdownShow);
-  TagifyUserList.on('dropdown:select', onSelectSuggestion);
-
-  let addAllSuggestionsEl;
-
-  function onDropdownShow(e) {
-    let dropdownContentEl = e.detail.tagify.DOM.dropdown.content;
-
-    if (TagifyUserList.suggestedListItems.length > 1) {
-      //addAllSuggestionsEl = getAddAllSuggestionsEl();
-
-      // insert "addAllSuggestionsEl" as the first element in the suggestions list
-      dropdownContentEl.insertBefore(addAllSuggestionsEl, dropdownContentEl.firstChild);
-    }
-  }
-
-  function onSelectSuggestion(e) {
-    if (e.detail.elm == addAllSuggestionsEl) TagifyUserList.dropdown.selectAll.call(TagifyUserList);
-  }
-
-  // create an "add all" custom suggestion element every time the dropdown changes
-  function getAddAllSuggestionsEl() {
-    // suggestions items should be based on "dropdownItem" template
-    return TagifyUserList.parseTemplate('dropdownItem', [
-      {
-        class: 'addAll',
-        name: 'Add all',
-        email:
-          TagifyUserList.settings.whitelist.reduce(function (remainingSuggestions, item) {
-            return TagifyUserList.isTagDuplicate(item.value) ? remainingSuggestions : remainingSuggestions + 1;
-          }, 0) + ' Members'
-      }
-    ]);
-  }
 }
-   }
 
 function deleteUsers(id){
     const swalWithBootstrapButtons = Swal.mixin({

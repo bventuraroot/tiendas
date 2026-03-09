@@ -132,13 +132,17 @@
 @section('page-script')
 <script>
 (function() {
-    const baseUrl = '{{ url("/") }}';
+    const storeUrl = '{{ route("product-categories.store") }}';
     const csrf = '{{ csrf_token() }}';
 
     function showToast(icon, title) {
         if (typeof Swal !== 'undefined') {
             Swal.fire({ icon, title, timer: 2500, showConfirmButton: false });
         }
+    }
+
+    function getUpdateUrl(id) {
+        return '{{ url("product-categories") }}/' + id;
     }
 
     // DataTable con búsqueda, orden y paginación
@@ -168,33 +172,45 @@
         e.preventDefault();
         const btn = this.querySelector('button[type="submit"]');
         btn.disabled = true;
-        fetch(baseUrl + '/product-categories/store', {
+        const formData = new FormData();
+        formData.append('_token', csrf);
+        formData.append('name', document.getElementById('name_new').value.trim());
+        formData.append('description', document.getElementById('description_new').value.trim() || '');
+
+        fetch(storeUrl, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': csrf,
                 'Accept': 'application/json',
             },
-            body: JSON.stringify({
-                name: document.getElementById('name_new').value.trim(),
-                description: document.getElementById('description_new').value.trim() || null,
-                _token: csrf
-            })
+            body: formData
         })
-        .then(r => r.json())
-        .then(data => {
+        .then(function(r) {
+            if (!r.ok && r.status !== 422) {
+                return r.text().then(function(text) { throw new Error('HTTP ' + r.status + ': ' + (text || r.statusText)); });
+            }
+            return r.json();
+        })
+        .then(function(data) {
             btn.disabled = false;
             if (data.success) {
                 showToast('success', data.message);
-                bootstrap.Modal.getInstance(document.getElementById('modalNuevaCategoria')).hide();
-                this.reset();
+                var modalEl = document.getElementById('modalNuevaCategoria');
+                if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                    var modal = bootstrap.Modal.getInstance(modalEl);
+                    if (modal) modal.hide();
+                }
+                document.getElementById('formNuevaCategoria').reset();
                 location.reload();
             } else {
-                const msg = (data.errors && data.errors.name) ? data.errors.name[0] : (data.message || 'Error al guardar');
+                var msg = (data.errors && data.errors.name) ? data.errors.name[0] : (data.message || 'Error al guardar');
                 showToast('error', msg);
             }
         })
-        .catch(() => { btn.disabled = false; showToast('error', 'Error de conexión'); });
+        .catch(function(err) {
+            btn.disabled = false;
+            showToast('error', err.message || 'Error de conexión');
+        });
     });
 
     // Editar: abrir modal
@@ -224,33 +240,45 @@
         const id = document.getElementById('id_edit').value;
         const btn = this.querySelector('button[type="submit"]');
         btn.disabled = true;
-        fetch(baseUrl + '/product-categories/' + id, {
-            method: 'PUT',
+        const formData = new FormData();
+        formData.append('_token', csrf);
+        formData.append('_method', 'PUT');
+        formData.append('name', document.getElementById('name_edit').value.trim());
+        formData.append('description', document.getElementById('description_edit').value.trim() || '');
+
+        fetch(getUpdateUrl(id), {
+            method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': csrf,
-                'Accept': 'application/json',
+                'Accept': 'application/json'
             },
-            body: JSON.stringify({
-                name: document.getElementById('name_edit').value.trim(),
-                description: document.getElementById('description_edit').value.trim() || null,
-                _token: csrf,
-                _method: 'PUT'
-            })
+            body: formData
         })
-        .then(r => r.json())
-        .then(data => {
+        .then(function(r) {
+            if (!r.ok && r.status !== 422) {
+                return r.text().then(function(text) { throw new Error('HTTP ' + r.status); });
+            }
+            return r.json();
+        })
+        .then(function(data) {
             btn.disabled = false;
             if (data.success) {
                 showToast('success', data.message);
-                bootstrap.Modal.getInstance(document.getElementById('modalEditarCategoria')).hide();
+                var modalEl = document.getElementById('modalEditarCategoria');
+                if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                    var modal = bootstrap.Modal.getInstance(modalEl);
+                    if (modal) modal.hide();
+                }
                 location.reload();
             } else {
-                const msg = (data.errors && data.errors.name) ? data.errors.name[0] : (data.message || 'Error al actualizar');
+                var msg = (data.errors && data.errors.name) ? data.errors.name[0] : (data.message || 'Error al actualizar');
                 showToast('error', msg);
             }
         })
-        .catch(() => { btn.disabled = false; showToast('error', 'Error de conexión'); });
+        .catch(function(err) {
+            btn.disabled = false;
+            showToast('error', err.message || 'Error de conexión');
+        });
     });
 
     // Eliminar
@@ -267,20 +295,24 @@
             showCancelButton: true,
             confirmButtonColor: '#d33',
             confirmButtonText: 'Sí, eliminar'
-        }).then(result => { if (result.isConfirmed) doDelete(id); });
+        }).then(function(result) { if (result.isConfirmed) doDelete(id); });
     });
 
     function doDelete(id) {
-        fetch(baseUrl + '/product-categories/' + id, {
+        var deleteUrl = '{{ url("product-categories") }}/' + id;
+        fetch(deleteUrl, {
             method: 'DELETE',
             headers: { 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json' }
         })
-        .then(r => r.json())
-        .then(data => {
+        .then(function(r) {
+            if (!r.ok) return r.text().then(function() { throw new Error('Error ' + r.status); });
+            return r.json();
+        })
+        .then(function(data) {
             if (data.success) { showToast('success', data.message); location.reload(); }
             else showToast('error', data.message || 'Error al eliminar');
         })
-        .catch(() => showToast('error', 'Error de conexión'));
+        .catch(function() { showToast('error', 'Error de conexión'); });
     }
 })();
 </script>
