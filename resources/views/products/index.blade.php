@@ -602,108 +602,38 @@
                     @endforeach
                 </select>
             </div>
-                    <div class="col-md-6">
-                        <label for="pharmaceutical_laboratory" class="form-label">Laboratorio Farmacéutico</label>
-                        <select class="select2laboratory form-select" id="pharmaceutical_laboratory" name="pharmaceutical_laboratory" aria-label="Seleccionar laboratorio">
-                        </select>
-                    </div>
+                    <!-- Campo de laboratorio farmacéutico ocultado para formato de tienda -->
                 </div>
             </div>
 
             <hr class="my-4">
 
-            <!-- Sección 3: Información Farmacéutica -->
+            <!-- Sección 3: Presentación del producto (ajustada para tienda/supermercado) -->
             <div class="mb-4">
-                <h6 class="mb-3 text-muted text-uppercase"><i class="ti ti-pill me-2"></i>Información Farmacéutica</h6>
+                <h6 class="mb-3 text-muted text-uppercase"><i class="ti ti-box me-2"></i>Presentación del producto</h6>
                 <div class="row g-3">
                     <div class="col-md-4">
-                        <label for="presentation_type" class="form-label">Presentación <span class="text-danger">*</span></label>
+                        <label for="presentation_type" class="form-label">Tipo de presentación <span class="text-danger">*</span></label>
                         <select class="form-select" id="presentation_type" name="presentation_type" aria-label="Seleccionar presentación" required>
                             <option value="">Seleccione una presentación</option>
+                            <option value="unidad" {{ old('presentation_type') == 'unidad' ? 'selected' : '' }}>Unidad</option>
                             <option value="caja" {{ old('presentation_type') == 'caja' ? 'selected' : '' }}>Caja</option>
-                            <option value="blister" {{ old('presentation_type') == 'blister' ? 'selected' : '' }}>Blister</option>
-                            <option value="pastilla" {{ old('presentation_type') == 'pastilla' ? 'selected' : '' }}>Pastilla</option>
-                            <option value="ampolla" {{ old('presentation_type') == 'ampolla' ? 'selected' : '' }}>Ampolla</option>
-                            <option value="frasco" {{ old('presentation_type') == 'frasco' ? 'selected' : '' }}>Frasco</option>
-                            <option value="tubo" {{ old('presentation_type') == 'tubo' ? 'selected' : '' }}>Tubo</option>
-                            <option value="sobre" {{ old('presentation_type') == 'sobre' ? 'selected' : '' }}>Sobre</option>
+                            <option value="paquete" {{ old('presentation_type') == 'paquete' ? 'selected' : '' }}>Paquete</option>
+                            <option value="bolsa" {{ old('presentation_type') == 'bolsa' ? 'selected' : '' }}>Bolsa</option>
+                            <option value="botella" {{ old('presentation_type') == 'botella' ? 'selected' : '' }}>Botella</option>
+                            <option value="lata" {{ old('presentation_type') == 'lata' ? 'selected' : '' }}>Lata</option>
                             <option value="otro" {{ old('presentation_type') == 'otro' ? 'selected' : '' }}>Otro</option>
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label for="specialty" class="form-label">Especialidad</label>
-                        <input type="text" id="specialty" name="specialty" class="form-control" placeholder="Ej: Cardiología, Pediatría" value="{{ old('specialty') }}"/>
-                    </div>
                     <div class="col-md-4">
-                        <label for="unit_measure" class="form-label">Unidad de Medida</label>
-                        <input type="text" id="unit_measure" name="unit_measure" class="form-control" placeholder="Ej: mg, ml, unidades" value="{{ old('unit_measure') }}"/>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="registration_number" class="form-label">Número de Registro Sanitario</label>
-                        <input type="text" id="registration_number" name="registration_number" class="form-control" placeholder="Número de registro sanitario" value="{{ old('registration_number') }}"/>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="sale_form" class="form-label">Forma de Venta</label>
-                        <select class="form-select" id="sale_form" name="sale_form" aria-label="Seleccionar forma de venta">
-                            <option value="">Seleccione</option>
-                            <option value="Venta libre" {{ old('sale_form') == 'Venta libre' ? 'selected' : '' }}>Venta libre</option>
-                            <option value="Con receta" {{ old('sale_form') == 'Con receta' ? 'selected' : '' }}>Con receta</option>
-                            <option value="Controlado" {{ old('sale_form') == 'Controlado' ? 'selected' : '' }}>Controlado</option>
-                            <option value="Sustancia controlada" {{ old('sale_form') == 'Sustancia controlada' ? 'selected' : '' }}>Sustancia controlada</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="product_type" class="form-label">Tipo de Producto</label>
-                        <select class="form-select" id="product_type" name="product_type" aria-label="Seleccionar tipo de producto">
-                            <option value="">Seleccione</option>
-                            <option value="Monofármico" {{ old('product_type') == 'Monofármico' ? 'selected' : '' }}>Monofármico</option>
-                            <option value="Polifármico" {{ old('product_type') == 'Polifármico' ? 'selected' : '' }}>Polifármico</option>
-                            <option value="Genérico" {{ old('product_type') == 'Genérico' ? 'selected' : '' }}>Genérico</option>
-                            <option value="Similar" {{ old('product_type') == 'Similar' ? 'selected' : '' }}>Similar</option>
-                            <option value="Biótico" {{ old('product_type') == 'Biótico' ? 'selected' : '' }}>Biótico</option>
-                        </select>
-                    </div>
-                    <div class="col-12">
-                        <label for="formula" class="form-label">Fórmula / Ingredientes Activos</label>
-                        <textarea id="formula" name="formula" class="form-control" rows="2" placeholder="Fórmula del medicamento (ingredientes activos)">{{ old('formula') }}</textarea>
+                        <label for="unit_measure" class="form-label">Unidad de medida (opcional)</label>
+                        <input type="text" id="unit_measure" name="unit_measure" class="form-control" placeholder="Ej: kg, lt, unidad" value="{{ old('unit_measure') }}"/>
                     </div>
                 </div>
             </div>
 
-            <hr class="my-4">
-
-            <!-- Sección 3.5: Configuración de Conversiones Farmacéuticas -->
-            <div class="mb-4">
-                <h6 class="mb-3 text-muted text-uppercase"><i class="ti ti-ruler me-2"></i>Configuración de Presentaciones para Inventario</h6>
-                <div class="mb-3 alert alert-info">
-                    <i class="ti ti-info-circle me-2"></i>
-                    <strong>Nota:</strong> Configura las conversiones para que el sistema pueda manejar correctamente el inventario. El inventario se guardará en <strong>pastillas</strong> (unidad base).
-                </div>
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label for="pastillas_per_blister" class="form-label">Pastillas por Blister <span class="text-muted">(Opcional)</span></label>
-                        <input type="number" id="pastillas_per_blister" name="pastillas_per_blister" class="form-control" placeholder="Ej: 10 (solo para pastillas)" min="1" step="1" value="{{ old('pastillas_per_blister') }}"/>
-                        <small class="form-text text-muted">Cantidad de pastillas que contiene cada blister. <strong>Dejar vacío si no aplica</strong> (jarabes, cremas, ampollas, etc.)</small>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="blisters_per_caja" class="form-label">Blisters por Caja <span class="text-muted">(Opcional)</span></label>
-                        <input type="number" id="blisters_per_caja" name="blisters_per_caja" class="form-control" placeholder="Ej: 10 (solo para pastillas)" min="1" step="1" value="{{ old('blisters_per_caja') }}"/>
-                        <small class="form-text text-muted">Cantidad de blisters que contiene cada caja. <strong>Dejar vacío si no aplica</strong> (jarabes, cremas, ampollas, etc.)</small>
-                    </div>
-                    <div class="col-12">
-                        <div class="card bg-light">
-                            <div class="card-body">
-                                <h6 class="mb-2 card-title"><i class="ti ti-calculator me-2"></i>Resumen de Conversiones</h6>
-                                <div id="conversion-summary" class="text-muted">
-                                    <p class="mb-1">1 Blister = <span id="summary-pastillas-per-blister">-</span> Pastillas</p>
-                                    <p class="mb-1">1 Caja = <span id="summary-blisters-per-caja">-</span> Blisters</p>
-                                    <p class="mb-0"><strong>1 Caja = <span id="summary-total-pastillas">-</span> Pastillas</strong></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Sección 3.5 eliminada: conversiones farmacéuticas no aplican a tienda genérica -->
 
             <hr class="my-4">
 
@@ -856,109 +786,37 @@
                     @endforeach
                 </select>
             </div>
-                    <div class="col-md-6">
-                        <label for="pharmaceutical_laboratoryedit" class="form-label">Laboratorio Farmacéutico</label>
-                        <select class="select2laboratoryedit form-select" id="pharmaceutical_laboratoryedit" name="pharmaceutical_laboratoryedit" aria-label="Seleccionar laboratorio">
-                        </select>
-                    </div>
+                    <!-- Campo de laboratorio farmacéutico ocultado para formato de tienda -->
                 </div>
             </div>
 
             <hr class="my-4">
 
-            <!-- Sección 3: Información Farmacéutica -->
+            <!-- Sección 3: Presentación del producto (ajustada para tienda/supermercado) -->
             <div class="mb-4">
-                <h6 class="mb-3 text-muted text-uppercase"><i class="ti ti-pill me-2"></i>Información Farmacéutica</h6>
+                <h6 class="mb-3 text-muted text-uppercase"><i class="ti ti-box me-2"></i>Presentación del producto</h6>
                 <div class="row g-3">
                     <div class="col-md-4">
-                        <label for="presentation_typeedit" class="form-label">Presentación <span class="text-danger">*</span></label>
+                        <label for="presentation_typeedit" class="form-label">Tipo de presentación <span class="text-danger">*</span></label>
                         <select class="form-select" id="presentation_typeedit" name="presentation_typeedit" aria-label="Seleccionar presentación" required>
                             <option value="">Seleccione una presentación</option>
+                            <option value="unidad">Unidad</option>
                             <option value="caja">Caja</option>
-                            <option value="blister">Blister</option>
-                            <option value="pastilla">Pastilla</option>
-                            <option value="ampolla">Ampolla</option>
-                            <option value="frasco">Frasco</option>
-                            <option value="tubo">Tubo</option>
-                            <option value="sobre">Sobre</option>
+                            <option value="paquete">Paquete</option>
+                            <option value="bolsa">Bolsa</option>
+                            <option value="botella">Botella</option>
+                            <option value="lata">Lata</option>
                             <option value="otro">Otro</option>
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label for="specialtyedit" class="form-label">Especialidad</label>
-                        <input type="text" id="specialtyedit" name="specialtyedit" class="form-control" placeholder="Ej: Cardiología, Pediatría"/>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="unit_measureedit" class="form-label">Unidad de Medida</label>
-                        <input type="text" id="unit_measureedit" name="unit_measureedit" class="form-control" placeholder="Ej: mg, ml, unidades"/>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="registration_numberedit" class="form-label">Número de Registro Sanitario</label>
-                        <input type="text" id="registration_numberedit" name="registration_numberedit" class="form-control" placeholder="Número de registro sanitario"/>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="sale_formedit" class="form-label">Forma de Venta</label>
-                        <select class="form-select" id="sale_formedit" name="sale_formedit" aria-label="Seleccionar forma de venta">
-                            <option value="">Seleccione</option>
-                            <option value="Venta libre">Venta libre</option>
-                            <option value="Con receta">Con receta</option>
-                            <option value="Controlado">Controlado</option>
-                            <option value="Sustancia controlada">Sustancia controlada</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="product_typeedit" class="form-label">Tipo de Producto</label>
-                        <select class="form-select" id="product_typeedit" name="product_typeedit" aria-label="Seleccionar tipo de producto">
-                            <option value="">Seleccione</option>
-                            <option value="Monofármico">Monofármico</option>
-                            <option value="Polifármico">Polifármico</option>
-                            <option value="Genérico">Genérico</option>
-                            <option value="Similar">Similar</option>
-                            <option value="Biótico">Biótico</option>
-                        </select>
-                    </div>
-                    <div class="col-12">
-                        <label for="formulaedit" class="form-label">Fórmula / Ingredientes Activos</label>
-                        <textarea id="formulaedit" name="formulaedit" class="form-control" rows="2" placeholder="Fórmula del medicamento (ingredientes activos)"></textarea>
+                        <label for="unit_measureedit" class="form-label">Unidad de medida (opcional)</label>
+                        <input type="text" id="unit_measureedit" name="unit_measureedit" class="form-control" placeholder="Ej: kg, lt, unidad"/>
                     </div>
                 </div>
             </div>
 
-            <hr class="my-4">
-
-            <!-- Sección 3.5: Configuración de Conversiones Farmacéuticas -->
-            <div class="mb-4">
-                <h6 class="mb-3 text-muted text-uppercase"><i class="ti ti-ruler me-2"></i>Configuración de Presentaciones para Inventario</h6>
-                <div class="mb-3 alert alert-info">
-                    <i class="ti ti-info-circle me-2"></i>
-                    <strong>Nota:</strong> Estos campos son <strong>opcionales</strong> y solo aplican para productos en formato de <strong>pastillas</strong> (tabletas, cápsulas, comprimidos).<br>
-                    <small>Para otros productos (jarabes, cremas, ampollas, etc.), deja estos campos vacíos. El sistema manejará el inventario por unidad (frascos, tubos, ampollas).</small>
-                </div>
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label for="pastillas_per_blisteredit" class="form-label">Pastillas por Blister <span class="text-muted">(Opcional)</span></label>
-                        <input type="number" id="pastillas_per_blisteredit" name="pastillas_per_blisteredit" class="form-control" placeholder="Ej: 10 (solo para pastillas)" min="1" step="1"/>
-                        <small class="form-text text-muted">Cantidad de pastillas que contiene cada blister. <strong>Dejar vacío si no aplica</strong> (jarabes, cremas, ampollas, etc.)</small>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="blisters_per_cajaedit" class="form-label">Blisters por Caja <span class="text-muted">(Opcional)</span></label>
-                        <input type="number" id="blisters_per_cajaedit" name="blisters_per_cajaedit" class="form-control" placeholder="Ej: 10 (solo para pastillas)" min="1" step="1"/>
-                        <small class="form-text text-muted">Cantidad de blisters que contiene cada caja. <strong>Dejar vacío si no aplica</strong> (jarabes, cremas, ampollas, etc.)</small>
-                    </div>
-                    <div class="col-12">
-                        <div class="card bg-light">
-                            <div class="card-body">
-                                <h6 class="mb-2 card-title"><i class="ti ti-calculator me-2"></i>Resumen de Conversiones</h6>
-                                <div id="conversion-summary-edit" class="text-muted">
-                                    <p class="mb-1">1 Blister = <span id="summary-pastillas-per-blister-edit">-</span> Pastillas</p>
-                                    <p class="mb-1">1 Caja = <span id="summary-blisters-per-caja-edit">-</span> Blisters</p>
-                                    <p class="mb-0"><strong>1 Caja = <span id="summary-total-pastillas-edit">-</span> Pastillas</strong></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Sección 3.5 eliminada: conversiones farmacéuticas no aplican a tienda genérica -->
 
             <hr class="my-4">
 
