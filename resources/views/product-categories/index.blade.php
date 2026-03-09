@@ -81,7 +81,7 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label" for="name_new">Nombre <span class="text-danger">*</span></label>
-                            <input type="text" id="name_new" name="name" class="form-control" placeholder="Ej: Antibióticos" required maxlength="255">
+                            <input type="text" id="name_new" name="name" class="form-control" placeholder="Ej: Abarrotes, Lácteos, Bebidas" required maxlength="255">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="mb-3">

@@ -3,6 +3,20 @@
  */
 
 'use strict';
+
+// URL base para peticiones AJAX (soporta instalación en subcarpeta)
+var productFormBaseUrl = (function () {
+  if (typeof window !== 'undefined' && window.baseUrl) {
+    return (String(window.baseUrl)).replace(/\/$/, '') + '/';
+  }
+  var el = document.querySelector('[data-base-url]');
+  var fromDataAttr = el ? el.getAttribute('data-base-url') : null;
+  if (fromDataAttr) {
+    return String(fromDataAttr).replace(/\/$/, '') + '/';
+  }
+  return window.location.origin.replace(/\/$/, '') + '/';
+})();
+
 $(document).ready(function (){
 
     $("#name").on("keyup", function () {
@@ -18,7 +32,7 @@ $(document).ready(function (){
     //Get providers disponibles - vaciar antes para evitar duplicados
     var iduser = $('#iduser').val();
     $.ajax({
-        url: "/provider/getproviders",
+        url: productFormBaseUrl + "provider/getproviders",
         method: "GET",
         success: function(response){
             $('#provider').empty().append('<option value="">Seleccione</option>');
@@ -31,21 +45,29 @@ $(document).ready(function (){
     });
     //Get marcas disponibles - vaciar antes para evitar duplicados
     $.ajax({
-        url: "/marcas/getmarcas",
+        url: productFormBaseUrl + "marcas/getmarcas",
         method: "GET",
         success: function(response){
+            if (!response || !Array.isArray(response)) return;
             $('#marca').empty().append('<option value="">Seleccione</option>');
             $('#marcaredit').empty().append('<option value="">Seleccione</option>');
             $.each(response, function(index, value) {
-                $('#marca').append('<option value="'+value.id+'">'+value.name.toUpperCase()+'</option>');
-                $('#marcaredit').append('<option value="'+value.id+'">'+value.name.toUpperCase()+'</option>');
+                var name = (value && value.name) ? String(value.name).toUpperCase() : '';
+                if (value && value.id) {
+                    $('#marca').append('<option value="'+value.id+'">'+name+'</option>');
+                    $('#marcaredit').append('<option value="'+value.id+'">'+name+'</option>');
+                }
             });
+        },
+        error: function() {
+            $('#marca').empty().append('<option value="">Seleccione</option>');
+            $('#marcaredit').empty().append('<option value="">Seleccione</option>');
         }
     });
 
     //Get pharmaceutical laboratories available
     $.ajax({
-        url: "/pharmaceutical-laboratories/get/laboratories",
+        url: productFormBaseUrl + "pharmaceutical-laboratories/get/laboratories",
         method: "GET",
         success: function(response){
             $('#pharmaceutical_laboratory').append('<option value="">Seleccione</option>');
@@ -339,7 +361,7 @@ $(document).ready(function (){
 
     //Get data edit Products
     $.ajax({
-        url: "getproductid/"+btoa(id),
+        url: productFormBaseUrl + "product/getproductid/"+btoa(id),
         method: "GET",
         success: function(response){
             $.each(response[0], function(index, value) {

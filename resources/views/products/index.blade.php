@@ -140,8 +140,11 @@
     <script src="{{ asset('assets/js/product-unit-crud.js') }}"></script>
     <script src="{{ asset('assets/js/product-validation.js') }}"></script>
     <script>
-        // Definir baseUrl si no está definida (evitar redeclaración)
-        window.baseUrl = window.baseUrl || window.location.origin + '/';
+        // Definir baseUrl si no está definida (soporta subcarpetas)
+        if (!window.baseUrl) {
+            var baseEl = document.querySelector('[data-base-url]');
+            window.baseUrl = (baseEl && baseEl.getAttribute('data-base-url')) ? baseEl.getAttribute('data-base-url').replace(/\/$/, '') + '/' : (window.location.origin + '/');
+        }
 
         $(document).ready(function() {
             var codeInput = $('#code');
