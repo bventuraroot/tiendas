@@ -68,13 +68,13 @@ Route::get('/', function () {
 
 //Route::get('/dashboard', function () { return view('dashboard');})->middleware(['auth', 'verified'])->name('dashboard');
 
-// Dashboard Central - Hub principal (siempre visible)
-Route::get('/dashboard', [DashboardController::class, 'central'])->middleware(['auth', 'verified'])->name('dashboard');
+// Dashboard Tienda - principal para la tienda
+Route::get('/dashboard', [DashboardController::class, 'storeDashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
-// Dashboard Ejecutivo - Información crítica de la empresa (requiere permiso)
-Route::get('/dashboard/analytics', [DashboardController::class, 'analytics'])->middleware(['auth', 'verified'])->name('dashboard.analytics');
+// (Opcional) Dashboard Ejecutivo - se deja disponible sin estar en el menú
+// Route::get('/dashboard/analytics', [DashboardController::class, 'analytics'])->middleware(['auth', 'verified'])->name('dashboard.analytics');
 
-// Dashboard específico para tienda (ventas, compras y utilidad)
+// Alias explícito para dashboard de tienda (por si se quiere usar la ruta corta)
 Route::get('/dashboard-tienda', [DashboardController::class, 'storeDashboard'])->middleware(['auth', 'verified'])->name('dashboard.tienda');
 
 // Dashboards específicos por módulo

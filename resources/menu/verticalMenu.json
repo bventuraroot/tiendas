@@ -1,20 +1,8 @@
 {
     "menu": [
         {
-            "url": "/dashboard",
-            "name": "Centro de Control",
-            "icon": "menu-icon fa-solid fa-house-medical",
-            "slug": "dashboard"
-        },
-        {
-            "url": "/dashboard/analytics",
-            "name": "Dashboard Ejecutivo",
-            "icon": "menu-icon fa-solid fa-chart-line",
-            "slug": "dashboard.analytics"
-        },
-        {
             "name": "Tienda",
-            "icon": "menu-icon fa-solid fa-pills",
+            "icon": "menu-icon fa-solid fa-store",
             "slug": "product.index",
             "badge": ["primary", "6"],
             "submenu": [
@@ -73,7 +61,7 @@
                 },
                 {
                     "url": "/cotizaciones/index",
-                    "name": "Cotizaciones",
+                    "name": "Presupuestos",
                     "slug": "cotizaciones.index"
                 },
                 {
