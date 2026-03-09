@@ -13,53 +13,7 @@
             "slug": "dashboard.analytics"
         },
         {
-            "name": "Clínica Médica",
-            "icon": "menu-icon fa-solid fa-stethoscope",
-            "slug": "patients.index",
-            "badge": ["success", "4"],
-            "submenu": [
-                {
-                    "url": "/patients",
-                    "name": "Pacientes",
-                    "slug": "patients.index"
-                },
-                {
-                    "url": "/doctors",
-                    "name": "Médicos",
-                    "slug": "doctors.index"
-                },
-                {
-                    "url": "/appointments",
-                    "name": "Citas Médicas",
-                    "slug": "appointments.index"
-                },
-                {
-                    "url": "/consultations",
-                    "name": "Consultas",
-                    "slug": "consultations.index"
-                }
-            ]
-        },
-        {
-            "name": "Laboratorio Clínico",
-            "icon": "menu-icon fa-solid fa-flask",
-            "slug": "lab-orders.index",
-            "badge": ["info", "2"],
-            "submenu": [
-                {
-                    "url": "/lab-orders",
-                    "name": "Órdenes de Laboratorio",
-                    "slug": "lab-orders.index"
-                },
-                {
-                    "url": "/lab-exams",
-                    "name": "Catálogo de Exámenes",
-                    "slug": "lab-exams.index"
-                }
-            ]
-        },
-        {
-            "name": "Farmacia",
+            "name": "Tienda",
             "icon": "menu-icon fa-solid fa-pills",
             "slug": "product.index",
             "badge": ["primary", "6"],
