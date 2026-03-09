@@ -3,9 +3,22 @@
  */
 
 'use strict';
-$(document).ready(function (){
-    //Get countrys avaibles
-    getpaises();
+
+// URL base segura (soporta instalación en subcarpeta)
+const companyBaseUrl = (function () {
+  if (typeof window !== 'undefined' && window.baseUrl) {
+    return window.baseUrl.replace(/\/$/, '') + '/';
+  }
+  const fromDataAttr = document.querySelector('[data-base-url]')?.getAttribute('data-base-url');
+  if (fromDataAttr) {
+    return fromDataAttr.replace(/\/$/, '') + '/';
+  }
+  return window.location.origin.replace(/\/$/, '') + '/';
+})();
+
+$(document).ready(function () {
+  // Cargar países disponibles al iniciar
+  getpaises();
 });
 
 (function () {
@@ -25,7 +38,7 @@ $(document).ready(function (){
 function getpaises(selected="",type=""){
     if(type=='edit'){
         $.ajax({
-            url: "/getcountry",
+            url: companyBaseUrl + "getcountry",
             method: "GET",
             success: function(response){
                 $.each(response, function(index, value) {
@@ -40,7 +53,7 @@ function getpaises(selected="",type=""){
         });
     }else{
         $.ajax({
-            url: "/getcountry",
+            url: companyBaseUrl + "getcountry",
             method: "GET",
             success: function(response){
                 $.each(response, function(index, value) {
