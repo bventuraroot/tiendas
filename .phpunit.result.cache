@@ -1,0 +1,1 @@
+{"version":1,"defects":{"Tests\\Feature\\Auth\\AuthenticationTest::test_users_can_authenticate_with_remember_me":4},"times":{"Tests\\Feature\\Auth\\AuthenticationTest::test_users_can_authenticate_with_remember_me":0.069}}

@@ -1,0 +1,41 @@
+{
+    "laravel-extra-intellisense.basePath": "/Volumes/ExternalHelp/Outside/htdocs/Agroservicio Milagro de Dios",
+    "laravel-extra-intellisense.basePathForCode": "/var/www/html",
+    "laravel-extra-intellisense.modelsPaths": [
+        "app/Models"
+    ],
+    "laravel-extra-intellisense.modelAccessorCase": "snake",
+    "laravel-extra-intellisense.modelAttributeCase": "default",
+    "laravel-extra-intellisense.disableAuth": false,
+    "laravel-extra-intellisense.disableBlade": false,
+    "laravel-extra-intellisense.disableErrorAlert": false,
+    "laravel-extra-intellisense.customValidationRules": {
+        "unique_with": "unique_with:table,field1,field2",
+        "exists_with": "exists_with:table,field1,field2",
+        "required_if_has": "required_if_has:field,value",
+        "custom_rule": "custom_rule:param1,param2"
+    },
+    "php.suggest.basic": false,
+    "php.validate.enable": true,
+    "php.executablePath": "/usr/bin/php",
+    "files.associations": {
+        "*.blade.php": "blade"
+    },
+    "emmet.includeLanguages": {
+        "blade": "html"
+    },
+    "blade.format.enable": true,
+    "intelephense.files.associations": [
+        "*.php",
+        "*.phtml",
+        "*.blade.php"
+    ],
+    "intelephense.environment.includePaths": [
+        "vendor/laravel/framework/src",
+        "app",
+        "config",
+        "database",
+        "resources",
+        "routes"
+    ]
+}

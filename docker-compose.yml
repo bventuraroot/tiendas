@@ -1,0 +1,42 @@
+services:
+  app:
+    build: .
+    container_name: farmacia-clinica-app
+    restart: unless-stopped
+    ports:
+      - "8003:80"
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - farmacia_clinica
+    depends_on:
+      - db
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html/public
+    command: >
+      sh -c "a2enmod rewrite &&
+             sed -ri -e 's!/var/www/html!$${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf &&
+             sed -ri -e 's!/var/www/!$${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf &&
+             apache2-foreground"
+
+  db:
+    image: mysql:8.0
+    container_name: farmacia-clinica-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-farmacia_clinica}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+    volumes:
+      - dbdata:/var/lib/mysql
+    ports:
+      - "3309:3306"
+    networks:
+      - farmacia_clinica
+    command: --default-authentication-plugin=mysql_native_password
+
+networks:
+  farmacia_clinica:
+    driver: bridge
+
+volumes:
+  dbdata:

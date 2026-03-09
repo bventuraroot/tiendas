@@ -1,0 +1,310 @@
+{
+    "menu": [
+        {
+            "url": "/dashboard",
+            "name": "Centro de Control",
+            "icon": "menu-icon fa-solid fa-house-medical",
+            "slug": "dashboard"
+        },
+        {
+            "url": "/dashboard/analytics",
+            "name": "Dashboard Ejecutivo",
+            "icon": "menu-icon fa-solid fa-chart-line",
+            "slug": "dashboard.analytics"
+        },
+        {
+            "name": "Clínica Médica",
+            "icon": "menu-icon fa-solid fa-stethoscope",
+            "slug": "patients.index",
+            "badge": ["success", "4"],
+            "submenu": [
+                {
+                    "url": "/patients",
+                    "name": "Pacientes",
+                    "slug": "patients.index"
+                },
+                {
+                    "url": "/doctors",
+                    "name": "Médicos",
+                    "slug": "doctors.index"
+                },
+                {
+                    "url": "/appointments",
+                    "name": "Citas Médicas",
+                    "slug": "appointments.index"
+                },
+                {
+                    "url": "/consultations",
+                    "name": "Consultas",
+                    "slug": "consultations.index"
+                }
+            ]
+        },
+        {
+            "name": "Laboratorio Clínico",
+            "icon": "menu-icon fa-solid fa-flask",
+            "slug": "lab-orders.index",
+            "badge": ["info", "2"],
+            "submenu": [
+                {
+                    "url": "/lab-orders",
+                    "name": "Órdenes de Laboratorio",
+                    "slug": "lab-orders.index"
+                },
+                {
+                    "url": "/lab-exams",
+                    "name": "Catálogo de Exámenes",
+                    "slug": "lab-exams.index"
+                }
+            ]
+        },
+        {
+            "name": "Farmacia",
+            "icon": "menu-icon fa-solid fa-pills",
+            "slug": "product.index",
+            "badge": ["primary", "6"],
+            "submenu": [
+                {
+                    "url": "/product/index",
+                    "name": "Productos",
+                    "slug": "product.index"
+                },
+                {
+                    "url": "/product-categories",
+                    "name": "Categorías de Productos",
+                    "slug": "product-categories.index"
+                },
+                {
+                    "url": "/inventory",
+                    "name": "Inventario",
+                    "slug": "inventory.index"
+                },
+                {
+                    "url": "/pharmaceutical-laboratories",
+                    "name": "Laboratorios Farmacéuticos",
+                    "slug": "pharmaceutical-laboratories.index"
+                },
+                {
+                    "url": "/purchase/index",
+                    "name": "Compras",
+                    "slug": "purchase.index"
+                },
+                {
+                    "url": "/marcas/index",
+                    "name": "Marcas",
+                    "slug": "marcas.index"
+                },
+                {
+                    "url": "/provider/index",
+                    "name": "Proveedores",
+                    "slug": "provider.index"
+                }
+            ]
+        },
+        {
+            "name": "Facturación",
+            "icon": "menu-icon fa-solid fa-file-invoice-dollar",
+            "slug": "sale.index",
+            "badge": ["info", "4"],
+            "submenu": [
+                {
+                    "url": "/facturacion-integral",
+                    "name": "Central de Facturación",
+                    "slug": "facturacion-integral"
+                },
+                {
+                    "url": "/sale/index",
+                    "name": "Facturación",
+                    "slug": "sale.index"
+                },
+                {
+                    "url": "/cotizaciones/index",
+                    "name": "Cotizaciones",
+                    "slug": "cotizaciones.index"
+                },
+                {
+                    "url": "/credit/index",
+                    "name": "Créditos",
+                    "slug": "credit.index"
+                }
+            ]
+        },
+        {
+            "name": "Administración",
+            "icon": "menu-icon fa-solid fa-shield",
+            "slug": "user.index",
+            "badge": ["info", "5"],
+            "submenu": [
+                {
+                    "url": "/user/index",
+                    "name": "Usuarios",
+                    "slug": "user.index"
+                },
+                {
+                    "url": "/rol/index",
+                    "name": "Roles",
+                    "slug": "rol.index"
+                },
+                {
+                    "url": "/permission/index",
+                    "name": "Permisos",
+                    "slug": "permission.index"
+                },
+                {
+                    "url": "/company/index",
+                    "name": "Empresas",
+                    "slug": "company.index"
+                },
+                {
+                    "url": "/client/index",
+                    "name": "Clientes",
+                    "slug": "client.index"
+                }
+            ]
+        },
+        {
+            "name": "Reportes y Análisis",
+            "icon": "menu-icon fa-solid fa-chart-line",
+            "slug": "report.index",
+            "badge": ["warning", "13"],
+            "submenu": [
+                {
+                    "url": "/report/index",
+                    "name": "Ver Todos los Reportes",
+                    "slug": "report.index"
+                },
+                {
+                    "url": "/report/sales",
+                    "name": "Ventas",
+                    "slug": "report.sales"
+                },
+                {
+                    "url": "/report/sales-by-client",
+                    "name": "Ventas por Clientes",
+                    "slug": "report.sales-by-client"
+                },
+                {
+                    "url": "/report/contribuyentes",
+                    "name": "Ventas Contribuyentes",
+                    "slug": "report.contribuyentes"
+                },
+                {
+                    "url": "/report/directas",
+                    "name": "Ventas Directas",
+                    "slug": "report.directas"
+                },
+                {
+                    "url": "/report/consumidor",
+                    "name": "Ventas Consumidor",
+                    "slug": "report.consumidor"
+                },
+                {
+                    "url": "/report/purchases",
+                    "name": "Compras",
+                    "slug": "report.purchases"
+                },
+                {
+                    "url": "/report/bookpurchases",
+                    "name": "Libro de Compras",
+                    "slug": "report.bookpurchases"
+                },
+                {
+                    "url": "/report/inventory",
+                    "name": "Inventario",
+                    "slug": "report.inventory"
+                },
+                {
+                    "url": "/report/inventory-by-category",
+                    "name": "Inventario por Categoría",
+                    "slug": "report.inventory-by-category"
+                },
+                {
+                    "url": "/report/inventory-by-provider",
+                    "name": "Inventario por Proveedor",
+                    "slug": "report.inventory-by-provider"
+                },
+                {
+                    "url": "/report/inventory-movements",
+                    "name": "Movimientos de Inventario",
+                    "slug": "report.inventory-movements"
+                },
+                {
+                    "url": "/report/inventory-kardex",
+                    "name": "Kardex (por producto)",
+                    "slug": "report.inventory-kardex"
+                },
+                {
+                    "url": "/report/reportyear",
+                    "name": "Ventas y compras por año",
+                    "slug": "report.reportyear"
+                }
+            ]
+        },
+        {
+            "name": "Configuración DTE",
+            "icon": "menu-icon fa-solid fa-satellite-dish",
+            "slug": "factmh.index",
+            "badge": ["danger", "8"],
+            "submenu": [
+                {
+                    "url": "/dte/dashboard",
+                    "name": "Configuración DTE",
+                    "slug": "factmh.dashboard"
+                },
+                {
+                    "url": "/dte/errores",
+                    "name": "Errores",
+                    "slug": "factmh.errores"
+                },
+                {
+                    "url": "/dte/contingencias",
+                    "name": "Contingencias",
+                    "slug": "factmh.contingencias"
+                },
+                {
+                    "url": "/factmh/test_crt",
+                    "name": "Muestra Enviados",
+                    "slug": "factmh.test_crt"
+                },
+                {
+                    "url": "/config/index",
+                    "name": "Configuraciones Ambiente",
+                    "slug": "config.index"
+                },
+                {
+                    "url": "/correlativos/",
+                    "name": "Gestión de Correlativos",
+                    "slug": "correlativos.index"
+                },
+                {
+                    "url": "/correlativos/estadisticas/view",
+                    "name": "Estadísticas Correlativos",
+                    "slug": "correlativos.estadisticas"
+                }
+            ]
+        },
+        {
+            "name": "Utilidades",
+            "icon": "menu-icon fa-solid fa-wrench",
+            "slug": "backups.index",
+            "badge": ["info", "3"],
+            "submenu": [
+                {
+                    "url": "/backups",
+                    "name": "Respaldos",
+                    "slug": "backups.index"
+                },
+                {
+                    "url": "/ai-chat",
+                    "name": "Chat IA",
+                    "slug": "ai-chat.index"
+                },
+                {
+                    "url": "/tutorials",
+                    "name": "Tutoriales",
+                    "slug": "tutorials.index"
+                }
+            ]
+        }
+    ]
+}

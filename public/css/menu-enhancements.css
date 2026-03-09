@@ -1,0 +1,92 @@
+/**
+ * Mejoras de Estilos del Menú
+ * - Mejora la visualización del estado activo
+ * - Mejora la visibilidad de los elementos seleccionados
+ */
+
+/* Mejorar la visualización de elementos activos */
+.menu-item.active > .menu-link {
+  position: relative;
+  font-weight: 500;
+}
+
+.menu-item.active > .menu-link::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: var(--bs-primary, #696cff);
+  border-radius: 0 2px 2px 0;
+}
+
+/* Resaltar enlaces activos */
+.menu-link.active-highlight {
+  background-color: rgba(var(--bs-primary-rgb, 105, 108, 255), 0.1);
+  color: var(--bs-primary, #696cff);
+}
+
+/* Mejorar visibilidad de submenús abiertos */
+.menu-item.open > .menu-link {
+  color: var(--bs-primary, #696cff);
+}
+
+/* Mejorar la transición cuando se está navegando */
+.menu-link.navigating {
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+/* Asegurar que los submenús activos se muestren */
+.menu-item.open > .menu-sub {
+  display: block !important;
+}
+
+/* Mejorar el indicador visual del estado activo en submenús */
+.menu-sub .menu-item.active > .menu-link {
+  background-color: rgba(var(--bs-primary-rgb, 105, 108, 255), 0.08);
+  color: var(--bs-primary, #696cff);
+  font-weight: 500;
+}
+
+/* Mejorar visibilidad en modo oscuro */
+[data-theme="dark"] .menu-item.active > .menu-link,
+.dark-style .menu-item.active > .menu-link {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .menu-link.active-highlight,
+.dark-style .menu-link.active-highlight {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+[data-theme="dark"] .menu-sub .menu-item.active > .menu-link,
+.dark-style .menu-sub .menu-item.active > .menu-link {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+/* Asegurar que los iconos también se resalten */
+.menu-item.active > .menu-link i {
+  color: var(--bs-primary, #696cff);
+}
+
+/* Mejorar el hover en elementos activos */
+.menu-item.active > .menu-link:hover {
+  background-color: rgba(var(--bs-primary-rgb, 105, 108, 255), 0.15);
+}
+
+/* Mejorar la visualización en móviles */
+@media (max-width: 1199.98px) {
+  .menu-item.active > .menu-link {
+    font-weight: 600;
+  }
+  
+  .menu-item.active > .menu-link::before {
+    width: 4px;
+  }
+}
+
+

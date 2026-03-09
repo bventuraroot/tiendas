@@ -1,0 +1,180 @@
+/* Estilos mejorados para el módulo de ventas */
+
+/* Tarjetas de información */
+.card {
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.card-header {
+    border-bottom: none;
+    font-weight: 600;
+}
+
+/* Colores de estado */
+.status-available {
+    color: #28a745;
+    background-color: rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.2);
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+
+.status-insufficient {
+    color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.2);
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+
+.status-warning {
+    color: #ffc107;
+    background-color: rgba(255, 193, 7, 0.1);
+    border: 1px solid rgba(255, 193, 7, 0.2);
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+
+/* Información de conversión */
+.conversion-info .row {
+    margin-bottom: 0.5rem;
+}
+
+.conversion-info .fw-bold {
+    font-size: 1.1em;
+}
+
+/* Información de stock */
+.stock-info .row {
+    margin-bottom: 0.5rem;
+}
+
+.stock-info .fw-bold {
+    font-size: 1.1em;
+}
+
+/* Validaciones */
+.validation-info .row {
+    margin-bottom: 0.5rem;
+}
+
+.validation-info .fw-bold {
+    font-size: 1.1em;
+}
+
+/* Detalles expandibles */
+.conversion-details,
+.stock-details,
+.validation-details {
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.conversion-details:hover,
+.stock-details:hover,
+.validation-details:hover {
+    border-color: #007bff;
+    box-shadow: 0 2px 8px rgba(0,123,255,0.1);
+}
+
+/* Iconos de estado */
+.status-icon {
+    font-size: 1.2em;
+    margin-right: 0.5rem;
+}
+
+/* Animaciones de carga */
+.loading-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .col-md-4 {
+        margin-bottom: 1rem;
+    }
+
+    .card-body {
+        padding: 1rem;
+    }
+
+    .conversion-details,
+    .stock-details,
+    .validation-details {
+        font-size: 0.9em;
+    }
+}
+
+/* Mejoras en el formulario */
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+}
+
+.form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+}
+
+/* Botón de limpiar código */
+#clear-codesearch {
+    border-left: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+#clear-codesearch:hover {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+/* Información del producto */
+#add-information-products {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+#add-information-products .card {
+    background: white;
+    border-radius: 8px;
+}
+
+/* Tabla de información del producto */
+.table-borderless th {
+    color: #6c757d;
+    font-weight: 600;
+    width: 30%;
+}
+
+.table-borderless td {
+    color: #495057;
+    font-weight: 500;
+}
+
+/* Imagen del producto */
+#product-image {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+#product-image:hover {
+    transform: scale(1.05);
+}
