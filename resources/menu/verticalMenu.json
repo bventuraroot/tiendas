@@ -44,21 +44,16 @@
             ]
         },
         {
+            "name": "Ventas",
+            "icon": "menu-icon fa-solid fa-shopping-cart",
+            "slug": "sale.index"
+        },
+        {
             "name": "Facturación",
             "icon": "menu-icon fa-solid fa-file-invoice-dollar",
             "slug": "sale.index",
-            "badge": ["info", "4"],
+            "badge": ["info", "2"],
             "submenu": [
-                {
-                    "url": "/facturacion-integral",
-                    "name": "Central de Facturación",
-                    "slug": "facturacion-integral"
-                },
-                {
-                    "url": "/sale/index",
-                    "name": "Facturación",
-                    "slug": "sale.index"
-                },
                 {
                     "url": "/cotizaciones/index",
                     "name": "Presupuestos",
