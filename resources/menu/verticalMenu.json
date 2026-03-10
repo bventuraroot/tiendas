@@ -39,10 +39,10 @@
             ]
         },
         {
-            "name": "Ventas",
+            "name": "Preventas",
             "icon": "menu-icon fa-solid fa-shopping-cart",
-            "slug": "sale.index",
-            "url": "/sale/index"
+            "slug": "presales.index",
+            "url": "/presales/index"
         },
         {
             "name": "Facturación",
