@@ -41,7 +41,8 @@
         {
             "name": "Ventas",
             "icon": "menu-icon fa-solid fa-shopping-cart",
-            "slug": "sale.index"
+            "slug": "sale.index",
+            "url": "/sale/index"
         },
         {
             "name": "Facturación",
