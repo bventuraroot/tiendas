@@ -34,10 +34,15 @@ class ProductCategoryController extends Controller
             'description' => $request->filled('description') ? trim($request->input('description')) : null,
         ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Categoría creada correctamente.',
-        ]);
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Categoría creada correctamente.',
+            ]);
+        }
+
+        return redirect()->route('product-categories.index')
+            ->with('success', 'Categoría creada correctamente.');
     }
 
     /**

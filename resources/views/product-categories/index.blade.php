@@ -25,6 +25,18 @@
             </a>
         </div>
         <div class="card-body">
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible mb-3" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible mb-3" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                </div>
+            @endif
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <p class="text-muted mb-0 small">Administre las categorías que se muestran en el formulario de productos. Los productos existentes no se modifican.</p>
                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalNuevaCategoria">
@@ -77,16 +89,28 @@
                     <h5 class="modal-title">Nueva categoría</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="formNuevaCategoria">
+                <form id="formNuevaCategoria" action="{{ route('product-categories.store') }}" method="POST">
+                    @csrf
                     <div class="modal-body">
+                        @if ($errors->any())
+                            <div class="alert alert-danger py-2">
+                                <ul class="mb-0 small">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <div class="mb-3">
                             <label class="form-label" for="name_new">Nombre <span class="text-danger">*</span></label>
-                            <input type="text" id="name_new" name="name" class="form-control" placeholder="Ej: Abarrotes, Lácteos, Bebidas" required maxlength="255">
-                            <div class="invalid-feedback"></div>
+                            <input type="text" id="name_new" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="Ej: Abarrotes, Lácteos, Bebidas" value="{{ old('name') }}" required maxlength="255">
+                            @error('name')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="description_new">Descripción</label>
-                            <input type="text" id="description_new" name="description" class="form-control" placeholder="Opcional" maxlength="500">
+                            <input type="text" id="description_new" name="description" class="form-control" placeholder="Opcional" value="{{ old('description') }}" maxlength="500">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -167,51 +191,13 @@
         });
     }
 
-    // Nueva categoría
-    document.getElementById('formNuevaCategoria').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const btn = this.querySelector('button[type="submit"]');
-        btn.disabled = true;
-        const formData = new FormData();
-        formData.append('_token', csrf);
-        formData.append('name', document.getElementById('name_new').value.trim());
-        formData.append('description', document.getElementById('description_new').value.trim() || '');
-
-        fetch(storeUrl, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': csrf,
-                'Accept': 'application/json',
-            },
-            body: formData
-        })
-        .then(function(r) {
-            if (!r.ok && r.status !== 422) {
-                return r.text().then(function(text) { throw new Error('HTTP ' + r.status + ': ' + (text || r.statusText)); });
-            }
-            return r.json();
-        })
-        .then(function(data) {
-            btn.disabled = false;
-            if (data.success) {
-                showToast('success', data.message);
-                var modalEl = document.getElementById('modalNuevaCategoria');
-                if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
-                    var modal = bootstrap.Modal.getInstance(modalEl);
-                    if (modal) modal.hide();
-                }
-                document.getElementById('formNuevaCategoria').reset();
-                location.reload();
-            } else {
-                var msg = (data.errors && data.errors.name) ? data.errors.name[0] : (data.message || 'Error al guardar');
-                showToast('error', msg);
-            }
-        })
-        .catch(function(err) {
-            btn.disabled = false;
-            showToast('error', err.message || 'Error de conexión');
-        });
+    // Nueva categoría: el formulario se envía por POST tradicional (sin AJAX)
+    @if ($errors->any())
+    document.addEventListener('DOMContentLoaded', function() {
+        var modal = new bootstrap.Modal(document.getElementById('modalNuevaCategoria'));
+        modal.show();
     });
+    @endif
 
     // Editar: abrir modal
     document.querySelectorAll('.edit-category').forEach(btn => {

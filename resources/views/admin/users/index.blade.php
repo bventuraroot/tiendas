@@ -79,7 +79,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="permissioncompany">Permiso a empresas</label>
-                        <input id="permissioncompany" name="permissioncompany" class="form-control" required/>
+                        <input id="permissioncompany" name="permissioncompany" class="form-control" placeholder="Escriba para buscar y seleccionar empresas..." required/>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="role">Rol de usuario</label>
@@ -129,7 +129,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="permissioncompanyedit">Permiso a empresas</label>
-                        <input id="permissioncompanyedit" name="permissioncompanyedit" class="form-control" required/>
+                        <input id="permissioncompanyedit" name="permissioncompanyedit" class="form-control" placeholder="Escriba para buscar y seleccionar empresas..." required/>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="roleedit">Rol de usuario</label>

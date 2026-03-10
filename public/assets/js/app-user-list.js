@@ -510,14 +510,15 @@ function tags(usersList){
   }
       // initialize Tagify on the above input node reference
   let TagifyUserList = new Tagify(TagifyUserListEl, {
-    tagTextProp: 'name', // very important since a custom template is used with this property as text. allows typing a "value" or a "name" to match input with whitelist
+    tagTextProp: 'name',
     enforceWhitelist: true,
-    skipInvalid: true, // do not remporarily add invalid tags
+    skipInvalid: true,
     dropdown: {
       closeOnSelect: false,
-      enabled: 0,
+      enabled: 1,
+      maxItems: 50,
       classname: 'users-list',
-      searchKeys: ['name', 'email'] // very important to set by which keys to search for suggesttions when typing
+      searchKeys: ['name', 'email']
     },
     templates: {
       tag: tagTemplate,
@@ -630,6 +631,7 @@ function editUsers(id){
             tagifyInput.id = 'permissioncompanyedit';
             tagifyInput.name = 'permissioncompanyedit';
             tagifyInput.className = 'form-control';
+            tagifyInput.placeholder = 'Escriba para buscar y seleccionar empresas...';
             tagifyInput.setAttribute('required', 'required');
             tagifyEl.parentNode.replaceChild(tagifyInput, tagifyEl);
 
@@ -638,7 +640,7 @@ function editUsers(id){
                 tagTextProp: 'name',
                 enforceWhitelist: true,
                 skipInvalid: true,
-                dropdown: { closeOnSelect: false, enabled: 0, classname: 'users-list', searchKeys: ['name', 'email'] },
+                dropdown: { closeOnSelect: false, enabled: 1, maxItems: 50, classname: 'users-list', searchKeys: ['name', 'email'] },
                 templates: {
                     tag: function(tagData) {
                         return "<tag title=\"" + (tagData.title || tagData.email || '') + "\" contenteditable='false' spellcheck='false' tabIndex='-1' class='" + (tagData.class || '') + "'>" +
