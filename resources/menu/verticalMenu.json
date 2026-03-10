@@ -39,7 +39,7 @@
             ]
         },
         {
-            "name": "Preventas",
+            "name": "Registrar Venta",
             "icon": "menu-icon fa-solid fa-shopping-cart",
             "slug": "presales.index",
             "url": "/presales/index"
@@ -50,6 +50,11 @@
             "slug": "sale.index",
             "badge": ["info", "2"],
             "submenu": [
+                {
+                    "url": "/sale/index",
+                    "name": "Ventas",
+                    "slug": "sale.index"
+                },
                 {
                     "url": "/cotizaciones/index",
                     "name": "Presupuestos",
