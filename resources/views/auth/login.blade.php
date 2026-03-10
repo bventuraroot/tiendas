@@ -49,11 +49,11 @@
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
 
-                            <!-- Email Address -->
+                            <!-- Usuario (email o nombre) -->
                             <div>
                                 <x-input-label for="email" :value="__('Usuario')" />
-                                <x-text-input id="email" class="form-control" type="email" name="email"
-                                    :value="old('email')" required autofocus />
+                                <x-text-input id="email" class="form-control" type="text" name="email"
+                                    :value="old('email')" placeholder="Email o nombre de usuario" required autofocus />
                                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
                             </div>
 

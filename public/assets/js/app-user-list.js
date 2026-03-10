@@ -4,6 +4,27 @@
 
 'use strict';
 
+(function() {
+  var logoBaseUrl = (function() {
+    var el = document.querySelector('[data-base-url]');
+    var base = el ? el.getAttribute('data-base-url') : null;
+    return (base ? base.replace(/\/$/, '') : (window.location.origin + '')) + '/assets/img/logo/';
+  })();
+
+  window.tagifyTagTemplate = function(tagData) {
+    return '<tag title="' + (tagData.title || tagData.email || '') + '" contenteditable=\'false\' spellcheck=\'false\' tabIndex="-1" class="' + (this.settings.classNames.tag || '') + ' ' + (tagData.class || '') + '" ' + this.getAttributes(tagData) + '>' +
+      '<x title=\'\' class=\'tagify__tag__removeBtn\' role=\'button\' aria-label=\'remove tag\'></x>' +
+      '<div><div class=\'tagify__tag__avatar-wrap\'><img onerror="this.style.visibility=\'hidden\'" src="' + logoBaseUrl + (tagData.avatar || '') + '"></div>' +
+      '<span class=\'tagify__tag-text\'>' + (tagData.name || '') + '</span></div></tag>';
+  };
+
+  window.tagifySuggestionTemplate = function(tagData) {
+    return '<div ' + this.getAttributes(tagData) + ' class=\'tagify__dropdown__item align-items-center ' + (tagData.class || '') + '\' tabindex="0" role="option">' +
+      (tagData.avatar ? '<div class=\'tagify__dropdown__item__avatar-wrap\'><img onerror="this.style.visibility=\'hidden\'" src="' + logoBaseUrl + tagData.avatar + '"></div>' : '') +
+      '<strong>' + (tagData.name || '') + '</strong><span>' + (tagData.email || '') + '</span></div>';
+  };
+})();
+
 // Configuración global para incluir el token CSRF en todas las peticiones AJAX
 $.ajaxSetup({
     headers: {
@@ -469,45 +490,6 @@ $(function () {
 
 
 function tags(usersList){
-    function tagTemplate(tagData) {
-    return `
-    <tag title="${tagData.title || tagData.email}"
-      contenteditable='false'
-      spellcheck='false'
-      tabIndex="-1"
-      class="${this.settings.classNames.tag} ${tagData.class ? tagData.class : ''}"
-      ${this.getAttributes(tagData)}
-    >
-      <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
-      <div>
-        <div class='tagify__tag__avatar-wrap'>
-          <img onerror="this.style.visibility='hidden'" src="../assets/img/logo/${tagData.avatar}">
-        </div>
-        <span class='tagify__tag-text'>${tagData.name}</span>
-      </div>
-    </tag>
-  `;
-  }
-
-  function suggestionItemTemplate(tagData) {
-    return `
-    <div ${this.getAttributes(tagData)}
-      class='tagify__dropdown__item align-items-center ${tagData.class ? tagData.class : ''}'
-      tabindex="0"
-      role="option"
-    >
-      ${
-        tagData.avatar
-          ? `<div class='tagify__dropdown__item__avatar-wrap'>
-          <img onerror="this.style.visibility='hidden'" src="../assets/img/logo/${tagData.avatar}">
-        </div>`
-          : ''
-      }
-      <strong>${tagData.name}</strong>
-      <span>${tagData.email}</span>
-    </div>
-  `;
-  }
       // initialize Tagify on the above input node reference
   let TagifyUserList = new Tagify(TagifyUserListEl, {
     tagTextProp: 'name',
@@ -521,8 +503,8 @@ function tags(usersList){
       searchKeys: ['name', 'email']
     },
     templates: {
-      tag: tagTemplate,
-      dropdownItem: suggestionItemTemplate
+      tag: window.tagifyTagTemplate,
+      dropdownItem: window.tagifySuggestionTemplate
     },
     whitelist: usersList
   });
@@ -553,11 +535,11 @@ function tags(usersList){
     return TagifyUserList.parseTemplate('dropdownItem', [
       {
         class: 'addAll',
-        name: 'Add all',
+        name: 'Agregar todo',
         email:
           TagifyUserList.settings.whitelist.reduce(function (remainingSuggestions, item) {
             return TagifyUserList.isTagDuplicate(item.value) ? remainingSuggestions : remainingSuggestions + 1;
-          }, 0) + ' Members'
+          }, 0) + ' empresas'
       }
     ]);
   }
@@ -604,11 +586,14 @@ function editUsers(id){
             return;
         }
 
-        var ids = (userData.CompaniesId || '').toString().split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+        var ids = (userData.CompaniesId || '').toString().split(',').map(function(s){ return String(s).trim(); }).filter(Boolean);
         var names = (userData.CompaniesName || '').toString().split(',').map(function(s){ return s.trim(); }).filter(Boolean);
         var initialCompanies = [];
         for (var i = 0; i < Math.max(ids.length, names.length); i++) {
-            initialCompanies.push({ value: ids[i] || '', name: names[i] || '' });
+            var id = ids[i];
+            var name = names[i] || '';
+            var match = companiesList.find(function(c){ return String(c.value) === String(id); });
+            initialCompanies.push(match ? match : { value: String(id), name: name, avatar: '', email: '' });
         }
 
         $('#idedit').val(userData.id);
@@ -635,28 +620,38 @@ function editUsers(id){
             tagifyInput.setAttribute('required', 'required');
             tagifyEl.parentNode.replaceChild(tagifyInput, tagifyEl);
 
-            var logoBase = (document.querySelector('[data-base-url]') ? document.querySelector('[data-base-url]').getAttribute('data-base-url').replace(/\/$/, '') : window.location.origin) + '/assets/img/logo/';
             tagifyEditInstance = new Tagify(tagifyInput, {
                 tagTextProp: 'name',
                 enforceWhitelist: true,
                 skipInvalid: true,
                 dropdown: { closeOnSelect: false, enabled: 1, maxItems: 50, classname: 'users-list', searchKeys: ['name', 'email'] },
                 templates: {
-                    tag: function(tagData) {
-                        return "<tag title=\"" + (tagData.title || tagData.email || '') + "\" contenteditable='false' spellcheck='false' tabIndex='-1' class='" + (tagData.class || '') + "'>" +
-                            "<x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>" +
-                            "<div><div class='tagify__tag__avatar-wrap'><img onerror=\"this.style.visibility='hidden'\" src='" + (logoBase + (tagData.avatar || '')) + "'></div>" +
-                            "<span class='tagify__tag-text'>" + (tagData.name || '') + "</span></div></tag>";
-                    },
-                    dropdownItem: function(tagData) {
-                        return "<div class='tagify__dropdown__item align-items-center' tabindex='0' role='option'>" +
-                            (tagData.avatar ? "<div class='tagify__dropdown__item__avatar-wrap'><img onerror=\"this.style.visibility='hidden'\" src='" + (logoBase + tagData.avatar) + "'></div>" : "") +
-                            "<strong>" + (tagData.name || '') + "</strong><span>" + (tagData.email || '') + "</span></div>";
-                    }
+                    tag: window.tagifyTagTemplate,
+                    dropdownItem: window.tagifySuggestionTemplate
                 },
                 whitelist: companiesList
             });
             tagifyEditInstance.addTags(initialCompanies);
+            tagifyEditInstance.on('dropdown:show dropdown:updated', function(e) {
+                var dropdownContentEl = e.detail.tagify.DOM.dropdown.content;
+                if (tagifyEditInstance.suggestedListItems && tagifyEditInstance.suggestedListItems.length > 1) {
+                    var addAllEl = tagifyEditInstance.parseTemplate('dropdownItem', [{
+                        class: 'addAll',
+                        name: 'Agregar todo',
+                        email: tagifyEditInstance.settings.whitelist.reduce(function(rem, item) {
+                            return tagifyEditInstance.isTagDuplicate(item.value) ? rem : rem + 1;
+                        }, 0) + ' empresas'
+                    }]);
+                    if (addAllEl && !dropdownContentEl.querySelector('.addAll')) {
+                        dropdownContentEl.insertBefore(addAllEl, dropdownContentEl.firstChild);
+                    }
+                }
+            });
+            tagifyEditInstance.on('dropdown:select', function(e) {
+                if (e.detail.elm && e.detail.elm.classList && e.detail.elm.classList.contains('addAll')) {
+                    tagifyEditInstance.dropdown.selectAll.call(tagifyEditInstance);
+                }
+            });
         }
 
         new bootstrap.Offcanvas(document.getElementById('offcanvasUpdateUser')).show();
