@@ -717,15 +717,9 @@ class PreSalesManager {
     finalizeSale() {
         if (!this.currentSaleId) return;
 
-        const typedocumentId = $('#typedocument-select').val();
         const clientId = $('#client-select').val();
         const acuenta = $('#acuenta-input').val() || 'Venta al menudeo';
         const waytopay = $('#payment-method').val();
-
-        if (!typedocumentId) {
-            this.showAlert('Error', 'Debe seleccionar un tipo de documento', 'error');
-            return;
-        }
 
         if (!clientId) {
             this.showAlert('Error', 'Debe seleccionar un cliente', 'error');
@@ -737,7 +731,6 @@ class PreSalesManager {
             method: 'POST',
             data: {
                 sale_id: this.currentSaleId,
-                typedocument_id: typedocumentId,
                 client_id: clientId,
                 acuenta: acuenta,
                 waytopay: waytopay,
@@ -746,8 +739,8 @@ class PreSalesManager {
             success: (response) => {
                 if (response.success) {
                     Swal.fire({
-                        title: '¡Borrador Creado!',
-                        text: `Borrador de factura creado exitosamente. Total: $${parseFloat(response.total).toFixed(2)}. El número de correlativo se asignará al finalizar la factura.`,
+                        title: '¡Venta registrada!',
+                        text: `Venta de consumidor final registrada exitosamente. Total: $${parseFloat(response.total).toFixed(2)}.`,
                         icon: 'success',
                         confirmButtonText: 'OK',
                         allowOutsideClick: false

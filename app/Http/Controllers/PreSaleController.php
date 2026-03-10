@@ -375,7 +375,7 @@ class PreSaleController extends Controller
     }
 
     /**
-     * Finalizar pre-venta y crear factura
+     * Finalizar pre-venta y registrar venta como consumidor final (sin generar factura/DTE)
      */
     public function finalizeSale(Request $request)
     {
@@ -384,7 +384,9 @@ class PreSaleController extends Controller
             'client_id' => 'nullable|exists:clients,id',
             'acuenta' => 'nullable|string|max:255',
             'waytopay' => 'required|in:1,2,3',
-            'typedocument_id' => 'required|exists:typedocuments,id'
+            // Se mantiene typedocument_id opcional para compatibilidad,
+            // pero si no viene se usará FACTURA CONSUMIDOR FINAL por defecto (id = 6)
+            'typedocument_id' => 'nullable|exists:typedocuments,id'
         ]);
 
         DB::beginTransaction();
@@ -412,15 +414,18 @@ class PreSaleController extends Controller
 
             $totalAmount = $totals->subtotal + $totals->nosujeta + $totals->exempt + $totals->iva;
 
-            // Actualizar venta como BORRADOR DE FACTURA con todos los campos necesarios
-            // NOTA: El correlativo se asignará cuando se finalice la factura en el módulo de facturación
-            $sale->client_id = $request->client_id;
+            // Determinar tipo de documento (interno): por defecto FACTURA CONSUMIDOR FINAL (id = 6)
+            $typedocumentId = $request->typedocument_id ?? 6;
+
+            // Actualizar venta como VENTA FINALIZADA de consumidor final
+            $sale->client_id = $request->client_id ?? $sale->client_id;
             $sale->acuenta = $request->acuenta ?? 'Venta al menudeo';
             $sale->waytopay = $request->waytopay;
-            $sale->typedocument_id = $request->typedocument_id;
+            $sale->typedocument_id = $typedocumentId;
             $sale->totalamount = $totalAmount;
-            $sale->nu_doc = null; // Se asignará al finalizar la factura
-            $sale->typesale = '3'; // BORRADOR DE FACTURA (nuevo estado)
+            // No se asigna correlativo ni se genera DTE desde preventas
+            $sale->nu_doc = null;
+            $sale->typesale = '1'; // Venta finalizada
             $sale->state = 1;      // Activo
             $sale->date = now()->format('Y-m-d');
             $sale->save();
@@ -429,10 +434,9 @@ class PreSaleController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Borrador de factura creado correctamente. Puede completarlo en el módulo de facturación.',
+                'message' => 'Venta registrada correctamente como consumidor final.',
                 'sale_id' => $sale->id,
-                'total' => $totalAmount,
-                'note' => 'El número de correlativo se asignará al finalizar la factura'
+                'total' => $totalAmount
             ]);
 
         } catch (\Exception $e) {

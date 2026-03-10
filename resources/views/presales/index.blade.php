@@ -311,7 +311,7 @@
                 <div class="card-header">
                     <h6 class="mb-0">
                         <i class="ti ti-file-text me-2"></i>
-                        Crear Borrador de Factura
+                        Registrar Venta
                     </h6>
                 </div>
                 <div class="card-body">
@@ -327,7 +327,7 @@
                         <select class="form-select select2client" id="client-select" required>
                             <option selected value="15">CLIENTES VARIOS</option>
                         </select>
-                        <small class="form-text text-muted">Debe seleccionar un cliente antes de finalizar el borrador</small>
+                        <small class="form-text text-muted">Debe seleccionar un cliente antes de registrar la venta</small>
                     </div>
                     <!--<div class="mb-3">
                         <label class="form-label" for="acuenta-input">A cuenta de</label>
@@ -347,7 +347,7 @@
                             id="finalize-btn"
                             disabled>
                         <i class="ti ti-file-text me-1"></i>
-                        Crear Borrador de Factura
+                        Registrar Venta
                     </button>
                     <!--<button type="button"
                             class="btn btn-outline-secondary w-100"
